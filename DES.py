@@ -2,9 +2,10 @@ from FileOperations import *
 from BlockCipherModes import * 
 from DES_encryption import encrypt
 from DES_encryption import createRoundKeys
-from UserInterface import *
+from UserInterface import decryption
+from UserInterface import fileName
 
-
+print("got into DES file and found my filename: "+ fileName)
 key = stringToBinary('testtest')
 content = readFileContent(fileName)
 binaryCypherText = []
