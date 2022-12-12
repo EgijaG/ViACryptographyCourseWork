@@ -3,6 +3,7 @@ from tkinter import filedialog
 import os
 from AES import *
 import DES_encryption
+import FileOperations
 window = tk.Tk()
 aes = AES()
 
@@ -72,6 +73,7 @@ button_exit.place(x=1300, y=20)
 #Key generation function
 def generateCryptoKey():
     global algorithm
+    plainText = FileOperations.readFileContent(fileName)
     print(algorithm)
     if algorithm == 0:
         key = DES_encryption.createRoundKeys('asdasdasasdasdasasdasdasasdasdasasdasdasasdasdasasdasdas', False)
@@ -79,12 +81,18 @@ def generateCryptoKey():
         result.pack()
     else:
         key = ''
-        cypher = aes.encrypt('asdasdas', AES.KeyInfo.SMALL).finalKey.list
-        for block in cypher:
+        cipherText = ''
+        cipher = aes.encrypt(plainText, AES.KeyInfo.SMALL)
+        for block in cipher.finalKey.list:
             for value in block:
                 key += hex(value).lstrip('0x')
-        result = tk.Label(text=key)
-        result.pack()
+        FileOperations.writeContentToFile(key, 'aes.key')
+        print(cipher.cipheredTextBlocks.list)
+        for block in cipher.cipheredTextBlocks.list:
+            for col in block.list:
+                for value in col:
+                    cipherText += hex(value).lstrip('0x')
+        FileOperations.writeContentToFile(key, 'secret.txt')
 
 # Script running function
 def run(file):
