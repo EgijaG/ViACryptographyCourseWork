@@ -16,22 +16,27 @@ info.pack()
 # Setting window size
 window.geometry("1400x1000")
 
+# Change decription bool based on button clicked
+def shouldDecrypt(value):
+    global decryption
+    decryption = value
 # Choice of process - encryption or decryption
 choiceText = tk.Label(text="Would you like to ENCRYPT or DECRYPT your file?")
 choiceText.pack()
-encryptBtn = tk.Button(text="Encrypt", bg='green')
-decryptionBtn = tk.Button(text="Decrypt", bg='purple')
+encryptBtn = tk.Button(text="Encrypt", bg='green' ,command=shouldDecrypt(False))
+decryptionBtn = tk.Button(text="Decrypt", bg='purple', command=shouldDecrypt(True))
 encryptBtn.pack()
 decryptionBtn.pack()
 
 # User choosing .txt file from their system
 # Implementing file browser
 def browseFiles():
-    filename = filedialog.askopenfilename(title = "Select a File",
-                                          filetypes = [("Text files","*.txt*")])
     global fileName
-    fileName = os.path.abspath(filename)
-    fileLabel.configure(text="Opened file: " + filename)
+    fileName = filedialog.askopenfilename(title = "Select a File",
+                                          filetypes = [("Text files","*.txt*")])
+    
+    fileName = os.path.abspath(fileName)
+    fileLabel.configure(text="Opened file: " + fileName)
 
 fileLabel = tk.Label(text="File selection")
 button_explore = tk.Button(
@@ -45,9 +50,9 @@ button_explore.pack()
 button_exit.pack()
 
 # Script running function
-def run(filename):
-    choiceText.configure(text="chosen file for running: "+ filename)
-    os.system(filename)
+def run(file):
+    choiceText.configure(text="chosen file for running: "+ file)
+    os.system(file)
 # Creating buttons for different choices and method calling
 choiceText = tk.Label(text="Would you like to use AES or DES encryption standard?")
 choiceText.pack()
@@ -57,7 +62,8 @@ aesBtn.pack()
 desBtn.pack()
 
 # Implementing key input fields
-
+initVector = tk.Entry(text="Please enter your initialization vector ")
+initVector.pack()
 
 
 window.mainloop()
