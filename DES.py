@@ -2,9 +2,9 @@ from FileOperations import *
 from BlockCipherModes import * 
 from DES_encryption import encrypt
 from DES_encryption import createRoundKeys
+from UserInterface import *
 
-decryption = True
-fileName = ''
+
 key = stringToBinary('testtest')
 content = readFileContent(fileName)
 binaryCypherText = []
