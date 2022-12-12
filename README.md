@@ -1,2 +1,3 @@
 # ViA Cryptography Course Work
-This is an encryption/decryption program that is developed by 3rd course students in order to learn AES and DES encryption standards.
+As a part of the Introduction to Cryptography course at Vidzeme University of Applied Sciences, third course students developed an encryption/decryption program to learn AES and DES encryption standards.
+AES stands for Advanced Encryption Standard. DES stands for Data Encryption Standard. Both DES and AES are symmetric-key block ciphers that are used in encryption where just one key (the secret key) is utilized to encode and decode electronic data.
