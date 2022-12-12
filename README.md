@@ -1,2 +1,2 @@
 # ViA Cryptography Course Work
-This is an encryption/decryption program that is developed by 3rd course students in order to learn AES and DES encryption standards.
+As a part of the Introduction to Cryptography course at Vidzeme University of Applied Sciences, third course students developed an encryption/decryption program to learn AES and DES encryption standards.
