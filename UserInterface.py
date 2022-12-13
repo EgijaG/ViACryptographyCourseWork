@@ -17,7 +17,6 @@ secondaryBtn = '#AAB1C3'
 bgcolor = '#dfcfd5'
 textCol = '#3C4770'
 
-window = tk.Tk()
 #Setting Windows title
 window.title('ViA Cryptography Course Work')
 window.configure(bg=bgcolor)
