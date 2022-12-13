@@ -2,21 +2,22 @@ from FileOperations import *
 from BlockCipherModes import * 
 from DES_encryption import encrypt
 from DES_encryption import createRoundKeys
+from UserInterface import decryption
+from UserInterface import fileName
 
-Decryption = True
-fileName = ''
+print("got into DES file and found my filename: "+ fileName)
 key = stringToBinary('testtest')
 content = readFileContent(fileName)
 binaryCypherText = []
-PlainText = []
+plainText = []
 initializationVector = ''
 
-if initializationVector == '' and not Decryption:
+if initializationVector == '' and not decryption:
     initializationVector = generateInitializationVector()
 
 content = checkIfBinary(content)
 
-roundKey = createRoundKeys(key,Decryption)
+roundKey = createRoundKeys(key,decryption)
 initalBinaryInitializationVector = stringToBinary(initializationVector)
 
 binaryInitializationVector = stringToBinary(initializationVector) #convert to initialization vector to binary
@@ -27,18 +28,18 @@ fullBinaryPlainText = addPaddingToBinaryPlainText(initalBinaryPlainText)
 binaryPlainTextArray = splitIn64Bits(fullBinaryPlainText) #splits it and returns array
 #initializationVector <-save this somewhere idk
 for binaryPlainText in binaryPlainTextArray:
-    if Decryption:
+    if decryption:
         binaryCBCText = encrypt(binaryPlainText,roundKey)
-        PlainText.append(xor(binaryCBCText,initalBinaryInitializationVector))
+        plainText.append(xor(binaryCBCText,initalBinaryInitializationVector))
         initalBinaryInitializationVector = binaryPlainText
     else:
         binaryCBCText = xor(binaryPlainText,initalBinaryInitializationVector)
         binaryCypherText.append(encrypt(binaryCBCText,roundKey))
         initalBinaryInitializationVector = binaryCBCText
 
-if Decryption:
+if decryption:
     writeContentToFile(binaryToString(removePaddingToBinaryPlainText
-                                      (arrayToString(PlainText))),
+                                      (arrayToString(plainText))),
                        fileName)
 else:
     writeContentToFile(arrayToString(binaryCypherText),fileName)
