@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from tkinter import filedialog
 import os
 from AES import *
@@ -80,19 +81,23 @@ def generateCryptoKey():
         result = tk.Label(text=key)
         result.pack()
     else:
-        key = ''
-        cipherText = ''
-        cipher = aes.encrypt(plainText, AES.KeyInfo.SMALL)
-        for block in cipher.finalKey.list:
-            for value in block:
-                key += hex(value).lstrip('0x')
-        FileOperations.writeContentToFile(key, 'aes.key')
-        print(cipher.cipheredTextBlocks.list)
-        for block in cipher.cipheredTextBlocks.list:
-            for col in block.list:
-                for value in col:
-                    cipherText += hex(value).lstrip('0x')
-        FileOperations.writeContentToFile(key, 'secret.txt')
+        if decryption != True:
+            key = ''
+            cipherText = ''
+            cipher = aes.encrypt(plainText, AES.KeyInfo.SMALL)
+            for block in cipher.finalKey.list:
+                for value in block:
+                    key += hex(value).lstrip('0x')
+            FileOperations.writeContentToFile(key, 'aes.key')
+            for block in cipher.cipheredTextBlocks.list:
+                for col in block.list:
+                    for value in col:
+                        cipherText += hex(value).lstrip('0x')
+            FileOperations.writeContentToFile(key, 'secret.txt')
+            messagebox.showinfo('Success', "File encrypted successfully")
+        else:
+            #Decryption script goes here
+            print('Not implemented yet.')
 
 # Script running function
 def run(file):
