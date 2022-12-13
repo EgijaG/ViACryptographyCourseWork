@@ -50,8 +50,8 @@ choiceText = tk.Label(text="Would you like to ENCRYPT or DECRYPT your file?", fo
 choiceText.pack(pady=50)
 encryptBtn = tk.Button(text="Encrypt",command= lambda: shouldDecrypt(False), bg=mainBtnBg, fg=bgcolor, font=(font, 14))
 decryptionBtn = tk.Button(text="Decrypt", command= lambda: shouldDecrypt(True), bg=secondaryBtn, font=(font, 14))
-encryptBtn.place(x=600, y=230)
-decryptionBtn.place(x=700, y=230)
+encryptBtn.pack(pady=10)
+decryptionBtn.pack(pady=10)
 
 # User choosing .txt file from their system
 # Implementing file browser
@@ -67,15 +67,14 @@ def browseFiles():
     choiceText.pack(pady=20)
     aesBtn = tk.Button(text="AES", bg=mainBtnBg, fg=bgcolor, command = lambda: run('AES.py'), font=(font, 14))
     desBtn = tk.Button(text="DES",bg=secondaryBtn, command = lambda: run('DES.py'), font=(font, 14))
-    aesBtn.place(x=620, y=450)
-    desBtn.place(x=720, y=450)
+    aesBtn.pack(pady=10)
+    desBtn.pack(pady=10)
 
 fileLabel = tk.Label(text='')
 
 button_exit = tk.Button(
                      text = "Exit",
                      command = exit, font=(font, 14))
-button_exit.pack()
 button_exit.place(x=1300, y=20)
 
 #Key generation function
