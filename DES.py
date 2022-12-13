@@ -9,7 +9,7 @@ key = stringToBinary('testtest')
 content = readFileContent(fileName)
 binaryCypherText = []
 PlainText = []
-initializationVector = '12345678'
+initializationVector = ''
 
 if initializationVector == '' and not decryption:
     initializationVector = generateInitializationVector()
