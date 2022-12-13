@@ -1,7 +1,12 @@
 import tkinter as tk
+from tkinter import messagebox
 from tkinter import filedialog
 import os
-import AES
+from AES import *
+import DES_encryption
+import FileOperations
+window = tk.Tk()
+aes = AES()
 
 font = 'Helvetica'
 heading = 16
@@ -19,6 +24,7 @@ window.configure(bg=bgcolor)
 # Setting window size
 window.geometry("1400x900")
 decryption = True
+algorithm = 1   #0 - DES, 1 - AES
 fileName = ''
 
 # Creating text for user information
@@ -73,14 +79,44 @@ button_exit = tk.Button(
 button_exit.pack()
 button_exit.place(x=1300, y=20)
 
+#Key generation function
+def generateCryptoKey():
+    global algorithm
+    plainText = FileOperations.readFileContent(fileName)
+    print(algorithm)
+    if algorithm == 0:
+        key = DES_encryption.createRoundKeys('asdasdasasdasdasasdasdasasdasdasasdasdasasdasdasasdasdas', False)
+        result = tk.Label(text=key)
+        result.pack()
+    else:
+        if decryption != True:
+            key = ''
+            cipherText = ''
+            cipher = aes.encrypt(plainText, AES.KeyInfo.SMALL)
+            for block in cipher.finalKey.list:
+                for value in block:
+                    key += hex(value).lstrip('0x')
+            FileOperations.writeContentToFile(key, 'aes.key')
+            for block in cipher.cipheredTextBlocks.list:
+                for col in block.list:
+                    for value in col:
+                        cipherText += hex(value).lstrip('0x')
+            FileOperations.writeContentToFile(key, 'secret.txt')
+            messagebox.showinfo('Success', "File encrypted successfully")
+        else:
+            #Decryption script goes here
+            print('Not implemented yet.')
+
 # Script running function
 def run(file):
-    choiceText.configure(text="chosen file for running: "+ file, bg=bgcolor, fg=textCol, font=(font, 13))
-    os.system(file)
+    choiceText.configure(text="chosen file for running: "+ file)
+    #os.system(file)
 
+    encryptButton = tk.Button(text='Generate key', command= generateCryptoKey)
+    encryptButton.pack()
     # Implementing key input fields
-    initVector = tk.Entry(text="Please enter your initialization vector ", font=(font, 13), fg=textCol)
-    initVector.pack(pady=65)
+    #initVector = tk.Entry(text="Please enter your initialization vector ")
+    #initVector.pack()
 
 
 
