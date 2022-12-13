@@ -2,44 +2,42 @@ from FileOperations import *
 from BlockCipherModes import * 
 from DES_encryption import encrypt
 from DES_encryption import createRoundKeys
-from UserInterface import decryption
-from UserInterface import fileName
 
-print("got into DES file and found my filename: "+ fileName)
+Decryption = True
+fileName = 'test.txt'
 key = stringToBinary('testtest')
 content = readFileContent(fileName)
 binaryCypherText = []
-plainText = []
-initializationVector = ''
+PlainText = []
+initializationVector = '12345678'
 
-if initializationVector == '' and not decryption:
+if initializationVector == '' and not Decryption:
     initializationVector = generateInitializationVector()
+    print(initializationVector)
 
 content = checkIfBinary(content)
 
-roundKey = createRoundKeys(key,decryption)
+roundKey = createRoundKeys(key,Decryption)
 initalBinaryInitializationVector = stringToBinary(initializationVector)
 
 binaryInitializationVector = stringToBinary(initializationVector) #convert to initialization vector to binary
+if not Decryption:
+    content = addPaddingToBinaryPlainText(content)
 
-initalBinaryPlainText = content
-fullBinaryPlainText = addPaddingToBinaryPlainText(initalBinaryPlainText)
-
-binaryPlainTextArray = splitIn64Bits(fullBinaryPlainText) #splits it and returns array
+binaryPlainTextArray = splitIn64Bits(content) #splits it and returns array
 #initializationVector <-save this somewhere idk
 for binaryPlainText in binaryPlainTextArray:
-    if decryption:
+    if Decryption:
         binaryCBCText = encrypt(binaryPlainText,roundKey)
-        plainText.append(xor(binaryCBCText,initalBinaryInitializationVector))
+        PlainText.append(xor(binaryCBCText,initalBinaryInitializationVector))
         initalBinaryInitializationVector = binaryPlainText
     else:
         binaryCBCText = xor(binaryPlainText,initalBinaryInitializationVector)
-        binaryCypherText.append(encrypt(binaryCBCText,roundKey))
-        initalBinaryInitializationVector = binaryCBCText
-
-if decryption:
+        initalBinaryInitializationVector = encrypt(binaryCBCText,roundKey)
+        binaryCypherText.append(initalBinaryInitializationVector)
+if Decryption:
     writeContentToFile(binaryToString(removePaddingToBinaryPlainText
-                                      (arrayToString(plainText))),
+                                      (arrayToString(PlainText))),
                        fileName)
 else:
     writeContentToFile(arrayToString(binaryCypherText),fileName)
