@@ -1,6 +1,29 @@
 import random
 import enum
-
+def fix_overflow(n) :
+        if (n > 255):
+            n = n ^ 27
+        if (n > 255):
+            n %= 256
+        return n
+def num2 (n) :
+    n = n * 2
+    n = fix_overflow(n)
+    return n
+def num3 (n) :
+    return num2(n) ^ n
+def num4 (n) :
+    return num2(num2(n))
+def num8 (n) :
+    return num2(num4(n))
+def num9 (n) :
+    return num8(n) ^ n
+def num11 (n) :
+    return num8(n) ^ num2(n) ^ n
+def num13 (n) :
+    return num8(n) ^ num4(n) ^ n
+def num14 (n) :
+    return num8(n) ^ num4(n) ^ num2(n)
 s_box = (
     (0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5,
      0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76),
@@ -277,3 +300,76 @@ class AES:
                 tempRowByteIndex += 1
 
             shiftAmount += 1
+
+    def mix_columns(self, plaintextBlock):
+        multipliers = [
+            [2, 3, 1, 1],
+            [1, 2, 3, 1],
+            [1, 1, 2, 3],
+            [3, 1, 1, 2]
+        ]
+        tempText = []
+        resArr = []
+        for col in plaintextBlock.list:
+            tempRowBytes = []
+            for rowIndex in range(4):
+                tempRowBytes.append(col[rowIndex])
+            tempText.append(tempRowBytes)
+        num = 0
+
+        for y in range(4):
+            for x in range(4):
+                res = 0
+                for z in range(4):
+                    num = 0
+                    if (multipliers[x][z] == 1):
+                        num = tempText[y][z]
+                    elif (multipliers[x][z] == 2):
+                        num = num2(tempText[y][z])
+                    elif (multipliers[x][z] == 3):
+                        num = num3(tempText[y][z])
+                    res ^= num
+                resArr.append(res)
+        tempRowByteIndex = 0
+        for col in plaintextBlock.list:
+            for rowIndex in range(4):     
+                col[rowIndex] = resArr[tempRowByteIndex]
+                tempRowByteIndex += 1
+    
+    def inv_mix_columns (self, ciphertextBlock) :
+        multipliers = [
+            [14, 11, 13, 9],
+            [9, 14, 11, 13],
+            [13, 9, 14, 11],
+            [11, 13, 9, 14]
+        ]
+        tempText = []
+        resArr = []
+        for col in ciphertextBlock.list:
+            tempRowBytes = []
+            for rowIndex in range(4):
+                tempRowBytes.append(col[rowIndex])
+            tempText.append(tempRowBytes)
+        num = 0
+
+        for y in range(4):
+            for x in range(4):
+                res = 0
+                for z in range(4):
+                    num = 0
+                    num = tempText[y][z]
+                    if (multipliers[x][z] == 9):
+                        num = num9(tempText[y][z])
+                    elif (multipliers[x][z] == 11):
+                        num = num11(tempText[y][z])
+                    elif (multipliers[x][z] == 13):
+                        num = num13(tempText[y][z])
+                    elif (multipliers[x][z] == 14):
+                        num = num14(tempText[y][z])
+                    res ^= num
+                resArr.append(res)
+        tempRowByteIndex = 0
+        for col in ciphertextBlock.list:
+            for rowIndex in range(4):     
+                col[rowIndex] = resArr[tempRowByteIndex]
+                tempRowByteIndex += 1
