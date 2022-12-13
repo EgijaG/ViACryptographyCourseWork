@@ -2,7 +2,7 @@ import os
 from BlockCipherModes import stringToBinary 
 
 def readFileContent(file_name):
-    file = open(os.path.join(f'{file_name}'),'r')
+    file = open(file_name,'r')
     data = file.read().rstrip()
     file.close()
     return data
@@ -22,7 +22,7 @@ def checkIfBinary(data):
         return data
     
 def writeContentToFile(content, file_name):
-    file = open(os.path.join(f'{file_name}'),'w')
+    file = open(file_name,'w')
     file.seek(0)
     file.write(content)
     file.truncate()
